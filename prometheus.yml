@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'api-documentation-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['api-documentation-service:8095']
+        labels:
+          application: 'API-Documentation-Service'
+          environment: 'production'
+
+  - job_name: 'eureka-server'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['eureka-server:8761']
+        labels:
+          application: 'Discovery-Service'
+          environment: 'production'
+

@@ -1,0 +1,128 @@
+spring:
+  application:
+    name: API-Documentation-Service
+
+  # Disable Config Server
+  config:
+    import: "optional:configserver:"
+
+server:
+  port: 8095
+
+# Eureka Configuration
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    enabled: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+# SpringDoc OpenAPI Configuration
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    display-request-duration: true
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+    filter: true
+    syntax-highlight:
+      activated: true
+    try-it-out-enabled: true
+    persistent-authorization: true
+    disable-swagger-default-url: true
+    config-url: /v3/api-docs/swagger-config
+    use-root-path: true
+  show-actuator: true
+  group-configs:
+    - group: v1
+      paths-to-match: /api/v1/**
+      display-name: API Version 1
+    - group: v2
+      paths-to-match: /api/v2/**
+      display-name: API Version 2
+    - group: v3
+      paths-to-match: /api/v3/**
+      display-name: API Version 3
+    - group: deprecated
+      paths-to-match: /api/deprecated/**
+      display-name: Deprecated APIs
+    - group: all
+      paths-to-match: /api/**
+      display-name: All APIs
+
+# API Management Configuration
+api:
+  info:
+    title: Microservices API Documentation
+    description: Comprehensive API documentation portal with versioning and deprecation management
+    version: 1.0.0
+    contact:
+      name: API Support Team
+      email: api-support@example.com
+      url: https://api.example.com/support
+    license:
+      name: Apache 2.0
+      url: https://www.apache.org/licenses/LICENSE-2.0.html
+    terms-of-service: https://api.example.com/terms
+
+  versioning:
+    enabled: true
+    default-version: v3
+    supported-versions:
+      - v1
+      - v2
+      - v3
+    deprecated-versions:
+      - v1
+
+  deprecation:
+    enabled: true
+    warning-days: 90
+    sunset-days: 180
+    migration-guide-url: https://api.example.com/migration
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,openapi,swagger-ui
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  health:
+    defaults:
+      enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    com.netflix.eureka: INFO
+    com.netflix.discovery: INFO
+    root: INFO
+    com.spunit.apidocs: DEBUG
+    org.springdoc: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/api-documentation-service.log
+    max-size: 10MB
+    max-history: 30
+

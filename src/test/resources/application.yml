@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: API-Documentation-Service
+
+server:
+  port: 8095
+
+eureka:
+  client:
+    enabled: false
+
+# Logging Configuration
+logging:
+  level:
+    com.netflix.eureka: INFO
+    com.netflix.discovery: INFO
+    root: INFO
+    com.spunit.apidocs: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
